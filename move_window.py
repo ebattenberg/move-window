@@ -6,6 +6,13 @@ import sys
 import pdb
 import re
 
+# configuration ----------------------
+MON0_SIZE = (1920,1080)
+MON1_SIZE = (1920,1200)
+MON0_OFFSET = (0,120)
+MON1_OFFSET = (1920,0)
+# ------------------------------------
+
 if len(sys.argv) < 2:
     sys.exit('usage: python move_window.py {small_left,big_left,small_right,big_right}')
 
@@ -19,20 +26,20 @@ overall_size = [int(x) for x in overall_size]
 win = sp.check_output(['xdotool', 'getactivewindow']).strip()
 win_info = sp.check_output(['xwininfo','-id',win])
 
-if overall_size[0] == 3840:
+if overall_size[0] == MON0_SIZE[0]+MON1_SIZE[0]:
     num_monitors = 2
-    monitor_size = [(1920,1080),(1920,1200)]
-    monitor_offset = [(0,120),(1920,0)]
+    monitor_size = [MON0_SIZE,MON1_SIZE]
+    monitor_offset = [MON0_OFFSET,MON1_OFFSET]
 
     left_coord = int(re.search(r".*Absolute upper-left X: +(\d+)\n",win_info).group(1))
     if left_coord < monitor_offset[1][0]:
         active_monitor = 0
     else:
         active_monitor = 1
-elif overall_size[0] == 1920:
+elif overall_size[0] == MON0_SIZE[0]:
     num_monitors = 1
-    monitor_size = [(1920,1080)]
-    monitor_offset = [(0,0)]
+    monitor_size = [MON0_SIZE]
+    monitor_offset = [MON0_OFFSET]
     active_monitor = 0
 else:
     raise ValueError, 'unsupported overall_size'
