@@ -5,10 +5,11 @@ Python script to move windows around Ubuntu desktop using hotkeys
 
 Requirements:
 xdotool (in Ubuntu: sudo apt-get install xdotool)
+xwininfo (part of X, I think)
 
 
 Installation instructions:  
-1. Install xdotool  
+1. Install requirements  
 2. move script to your ~/.scripts directory  
 3. edit script with your monitor configuration (up to two monitors supported)  
 	a. you can find your monitor sizes and offsets by running 'xrandr'  
