@@ -4,13 +4,21 @@ script to swap windows between monitors and move windows around on the active mo
 import subprocess as sp
 import sys
 import pdb
+import json
 import re
 
+try:
+    config = json.loads(open('move_window_conf.json').read())
+except IOError:
+    # create conf from xrandr
+        
+
+
 # configuration ----------------------
-MON0_SIZE = (1920,1080)
-MON1_SIZE = (1920,1200)
-MON0_OFFSET = (0,120)
-MON1_OFFSET = (1920,0)
+MON0_SIZE = config['mon0_size']
+MON1_SIZE = config['mon1_size']
+MON0_OFFSET = config['mon0_offset']
+MON1_OFFSET = config['mon1_offset']
 # ------------------------------------
 
 if len(sys.argv) < 2:
