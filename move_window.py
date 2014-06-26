@@ -39,10 +39,17 @@ def get_autoconfig(config_filepath):
             xrandr_info)
     if secondary_match:
         s1,s2,s3,s4 = secondary_match.group(1,2,3,4)
-        config['mon1_size'] = (int(s1),int(s2))
-        config['mon1_offset'] = (int(s3),int(s4))
+        if not primary_match:
+            print 'using secondary monitor size for primary configuration'
+            config['mon1_size'] = config['mon0_size']
+            config['mon1_offset'] = config['mon0_offset']
+            config['mon0_size'] = (int(s1),int(s2))
+            config['mon0_offset'] = (int(s3),int(s4))
+        else:
+            config['mon1_size'] = (int(s1),int(s2))
+            config['mon1_offset'] = (int(s3),int(s4))
     else:
-        print 'unable to find secondary monitor size'
+        print 'unable to find monitor size'
         config['mon1_size'] = (0,0)
         config['mon1_offset'] = (0,0)
 
