@@ -30,6 +30,6 @@ bottom_half: move window to bottom half of screen, full width
 left_half: move window to left half of screen, full height  
 right_half: move window to right half of screen, full height  
 centered: move window to center of screen at 70% width, full height  
-full: fullscreen
+full: fullscreen  
 autoconfig: generate json config file from xrandr
 
