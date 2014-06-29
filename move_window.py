@@ -122,10 +122,10 @@ elif OVERALL_SIZE[0] == MON0_SIZE[0]+MON1_SIZE[0]:
 
 
     left_coord = int(re.search(r".*Absolute upper-left X: +(\d+)\n",win_info).group(1))
-    if left_coord < monitor_offset[1][0]:
-        active_monitor = 0
-    else:
+    if left_coord < monitor_offset[0][0]:
         active_monitor = 1
+    else:
+        active_monitor = 0
 else:
     raise ValueError, 'unsupported overall_size'
 
