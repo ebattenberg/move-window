@@ -9,10 +9,11 @@ import re
 import os
 
 # ------------------------------------------
-# config path
+# constants
 # ------------------------------------------
 
 config_filepath = os.path.expanduser('~/.scripts/move_window_conf.json')
+usage = 'usage: python move_window.py {small_left,big_left,small_right,big_right,autoconfig}'
 
 # ------------------------------------------
 # helper functions 
@@ -62,15 +63,16 @@ def get_autoconfig(config_filepath):
 # arguments
 # ------------------------------------------
 
+
 if len(sys.argv) < 2:
-    sys.exit('usage: python move_window.py {small_left,big_left,small_right,big_right,autoconfig}')
+    sys.exit(usage)
 
 arg = sys.argv[1]
 
 if arg == 'autoconfig':
     # create conf from xrandr
     config = get_autoconfig(config_filepath)
-    json.dump(config,open(config_filepath,'w'))
+    json.dump(config,open(config_filepath,'w'),indent=4)
     print 'created config file at %s' % config_filepath
     sys.exit()
 
@@ -129,7 +131,6 @@ else:
 
 
 
-
 if arg == 'swap_monitors':
     if num_monitors > 1:
         new_x = monitor_offset[1-active_monitor][0]
@@ -158,42 +159,51 @@ else:
     # boundaries for centered but not maximized
     boarder_left = int(desktop_w * 0.15)
     boarder_right = int(desktop_w * 0.85)
+    if arg == 'info':
+        print '---------------------------'
+        print 'Desktop info '
+        print '---------------------------'
+        print 'Active monitor: ', active_monitor
+        print 'Offset: ', offset
+        print '---------------------------'
+        print ''
 
-    # move to upper left
-    sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1])])
-
-    if arg == 'small_left':
-        sp.check_call(['xdotool','windowsize',win,str(left_partition),str(desktop_h)])
-    elif arg == 'big_left':
-        sp.check_call(['xdotool','windowsize',win,str(right_partition),str(desktop_h)])
-    elif arg == 'small_right':
-        width = desktop_w - right_partition
-        sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]+right_partition),str(offset[1])])
-    elif arg == 'big_right':
-        width = desktop_w - left_partition
-        sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]+left_partition),str(offset[1])])
-    elif arg == 'top_half':
-        sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(middle_height)])
-    elif arg == 'bottom_half':
-        height = desktop_h - middle_height
-        sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(height)])
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1]+middle_height)])
-    elif arg == 'left_half':
-        sp.check_call(['xdotool','windowsize',win,str(middle_width),str(desktop_h)])
-    elif arg == 'right_half':
-        width = desktop_w - middle_width
-        sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]+middle_width),str(offset[1])])
-    elif arg == 'centered':
-        width = boarder_right - boarder_left
-        sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]+boarder_left),str(offset[1])])
-    elif arg == 'full':
-        sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(desktop_h)])
     else:
-        sys.exit('usage: python move_window.py {small_left,big_left,small_right,big_right}')
+        # move to upper left
+        sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1])])
+
+        if arg == 'small_left':
+            sp.check_call(['xdotool','windowsize',win,str(left_partition),str(desktop_h)])
+        elif arg == 'big_left':
+            sp.check_call(['xdotool','windowsize',win,str(right_partition),str(desktop_h)])
+        elif arg == 'small_right':
+            width = desktop_w - right_partition
+            sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]+right_partition),str(offset[1])])
+        elif arg == 'big_right':
+            width = desktop_w - left_partition
+            sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]+left_partition),str(offset[1])])
+        elif arg == 'top_half':
+            sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(middle_height)])
+        elif arg == 'bottom_half':
+            height = desktop_h - middle_height
+            sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(height)])
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1]+middle_height)])
+        elif arg == 'left_half':
+            sp.check_call(['xdotool','windowsize',win,str(middle_width),str(desktop_h)])
+        elif arg == 'right_half':
+            width = desktop_w - middle_width
+            sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]+middle_width),str(offset[1])])
+        elif arg == 'centered':
+            width = boarder_right - boarder_left
+            sp.check_call(['xdotool','windowsize',win,str(width),str(desktop_h)])
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]+boarder_left),str(offset[1])])
+        elif arg == 'full':
+            sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(desktop_h)])
+        else:
+            sys.exit(usage)
 
 
 
