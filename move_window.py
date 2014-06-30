@@ -169,12 +169,12 @@ else:
         print ''
 
     else:
-        # move to upper left
-        sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1])])
 
         if arg == 'small_left':
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1])])
             sp.check_call(['xdotool','windowsize',win,str(left_partition),str(desktop_h)])
         elif arg == 'big_left':
+            sp.check_call(['xdotool','windowmove',win,str(offset[0]),str(offset[1])])
             sp.check_call(['xdotool','windowsize',win,str(right_partition),str(desktop_h)])
         elif arg == 'small_right':
             width = desktop_w - right_partition
@@ -202,6 +202,8 @@ else:
             sp.check_call(['xdotool','windowmove',win,str(offset[0]+boarder_left),str(offset[1])])
         elif arg == 'full':
             sp.check_call(['xdotool','windowsize',win,str(desktop_w),str(desktop_h)])
+        elif arg == 'term':
+            sys.exit('term not implemented')
         else:
             sys.exit(usage)
 
