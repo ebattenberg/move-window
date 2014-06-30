@@ -54,6 +54,8 @@ def get_autoconfig(config_filepath):
         config['mon1_size'] = (0,0)
         config['mon1_offset'] = (0,0)
 
+    config['right_primary'] = True
+
     overall_size = re.search(r" current (\d+) x (\d+),",xrandr_info).group(1,2)
     config['overall_size'] = tuple(int(x) for x in overall_size)
 
@@ -99,6 +101,7 @@ MON1_SIZE = config['mon1_size']
 MON0_OFFSET = config['mon0_offset']
 MON1_OFFSET = config['mon1_offset']
 OVERALL_SIZE = config['overall_size']
+RIGHT_PRIMARY = config['right_primary']
 
 
 # -------------------------------------------
@@ -122,10 +125,16 @@ elif OVERALL_SIZE[0] == MON0_SIZE[0]+MON1_SIZE[0]:
 
 
     left_coord = int(re.search(r".*Absolute upper-left X: +(\d+)\n",win_info).group(1))
-    if left_coord < monitor_offset[0][0]:
-        active_monitor = 1
+    if RIGHT_PRIMARY:
+        if left_coord < monitor_offset[0][0]:
+            active_monitor = 1
+        else:
+            active_monitor = 0
     else:
-        active_monitor = 0
+        if left_coord < monitor_offset[1][0]:
+            active_monitor = 0
+        else:
+            active_monitor = 1
 else:
     raise ValueError, 'unsupported overall_size'
 
